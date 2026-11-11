@@ -9,3 +9,6 @@ local.properties
 .DS_Store
 captures/
 .cxx/
+
+*.png.tmp
+app/build/shots/

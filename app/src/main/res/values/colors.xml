@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dinero tokens, light theme (tokens.css :root). values-night/colors.xml overrides them for dark. -->
+<resources>
+    <color name="ds_canvas">#f5f6f8</color>
+    <color name="ds_surface">#ffffff</color>
+    <color name="ds_sunken">#fafbfc</color>
+    <color name="ds_subtle">#f8f9fb</color>
+    <color name="ds_hover">#f5f6f8</color>
+    <color name="ds_pressed">#e9ebef</color>
+    <color name="ds_line">#e4e7eb</color>
+    <color name="ds_line_soft">#eef0f3</color>
+    <color name="ds_line_strong">#d7dbe0</color>
+    <color name="ds_ink">#121417</color>
+    <color name="ds_ink_2">#374151</color>
+    <color name="ds_ink_3">#5b6472</color>
+    <color name="ds_ink_4">#636b78</color>
+    <color name="ds_brand">#1b1e24</color>
+    <color name="ds_on_brand">#ffffff</color>
+    <color name="ds_brand_tint">#eceef1</color>
+    <color name="ds_danger">#c5203f</color>
+    <color name="ds_danger_tint">#fdecef</color>
+    <color name="ds_danger_ink">#9f1239</color>
+    <color name="ds_warning">#a84d06</color>
+    <color name="ds_warning_tint">#fff4e5</color>
+    <color name="ds_warning_ink">#7c3f0a</color>
+    <color name="ds_backdrop">#73121417</color>
+    <color name="ic_launcher_background">#ffffff</color>
+</resources>

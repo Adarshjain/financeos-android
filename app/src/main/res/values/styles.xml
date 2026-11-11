@@ -1,3 +1,262 @@
-<resources>
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar" />
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Colour roles: Dinero tokens mapped onto Material 3 roles. No dynamic colour. -->
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/ds_brand</item>
+        <item name="colorOnPrimary">@color/ds_on_brand</item>
+        <item name="colorPrimaryContainer">@color/ds_brand_tint</item>
+        <item name="colorOnPrimaryContainer">@color/ds_ink</item>
+        <item name="colorSecondary">@color/ds_ink_2</item>
+        <item name="colorOnSecondary">@color/ds_surface</item>
+        <item name="colorSecondaryContainer">@color/ds_brand_tint</item>
+        <item name="colorOnSecondaryContainer">@color/ds_ink</item>
+        <item name="colorTertiary">@color/ds_warning</item>
+        <item name="colorOnTertiary">@color/ds_surface</item>
+        <item name="colorTertiaryContainer">@color/ds_warning_tint</item>
+        <item name="colorOnTertiaryContainer">@color/ds_warning_ink</item>
+        <item name="colorError">@color/ds_danger</item>
+        <item name="colorOnError">@color/ds_surface</item>
+        <item name="colorErrorContainer">@color/ds_danger_tint</item>
+        <item name="colorOnErrorContainer">@color/ds_danger_ink</item>
+        <item name="android:colorBackground">@color/ds_canvas</item>
+        <item name="colorSurface">@color/ds_surface</item>
+        <item name="colorOnSurface">@color/ds_ink</item>
+        <item name="colorOnBackground">@color/ds_ink</item>
+        <item name="colorSurfaceVariant">@color/ds_subtle</item>
+        <item name="colorOnSurfaceVariant">@color/ds_ink_3</item>
+        <item name="colorSurfaceContainerLowest">@color/ds_surface</item>
+        <item name="colorSurfaceContainerLow">@color/ds_sunken</item>
+        <item name="colorSurfaceContainer">@color/ds_subtle</item>
+        <item name="colorSurfaceContainerHigh">@color/ds_surface</item>
+        <item name="colorSurfaceContainerHighest">@color/ds_pressed</item>
+        <item name="colorOutline">@color/ds_line_strong</item>
+        <item name="colorOutlineVariant">@color/ds_line</item>
+        <item name="colorSurfaceInverse">@color/ds_ink</item>
+        <item name="colorOnSurfaceInverse">@color/ds_surface</item>
+        <item name="android:windowBackground">@color/ds_canvas</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:fontFamily">@font/figtree_500</item>
+        <item name="fontFamily">@font/figtree_500</item>
+
+        <!-- Type -->
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Fos.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Fos.Body</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Fos.Label</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Fos.Button</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.Fos.Label</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Fos.BodyLarge</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Fos.Title</item>
+
+        <!-- Shapes -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Fos.Md</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Fos.Lg</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Fos.Xxl</item>
+
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Fos.Dialog</item>
+        <item name="textInputStyle">@style/Widget.Fos.TextInputLayout</item>
+    </style>
+
+    <!-- radius-md 8, radius-lg 12, radius-2xl 22 -->
+    <style name="ShapeAppearance.Fos.Md" parent="ShapeAppearance.Material3.Corner.Small">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+    <style name="ShapeAppearance.Fos.Lg" parent="ShapeAppearance.Material3.Corner.Medium">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+    <style name="ShapeAppearance.Fos.Xxl" parent="ShapeAppearance.Material3.Corner.Large">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">22dp</item>
+    </style>
+
+    <!-- Type styles. Sizes follow the tokens where phone-readable; body-lg (17/24) replaces body (13/18), 12sp is the smallest. -->
+    <style name="TextAppearance.Fos.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">@font/figtree_500</item>
+        <item name="fontFamily">@font/figtree_500</item>
+        <item name="android:textSize">17sp</item>
+        <item name="lineHeight">24sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="TextAppearance.Fos.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/figtree_500</item>
+        <item name="fontFamily">@font/figtree_500</item>
+        <item name="android:textSize">14sp</item>
+        <item name="lineHeight">20sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="TextAppearance.Fos.Label" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:fontFamily">@font/figtree_600</item>
+        <item name="fontFamily">@font/figtree_600</item>
+        <item name="android:textSize">12sp</item>
+        <item name="lineHeight">16sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="TextAppearance.Fos.Heading" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:fontFamily">@font/figtree_800</item>
+        <item name="fontFamily">@font/figtree_800</item>
+        <item name="android:textSize">14sp</item>
+        <item name="lineHeight">20sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="TextAppearance.Fos.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/figtree_800</item>
+        <item name="fontFamily">@font/figtree_800</item>
+        <item name="android:textSize">17sp</item>
+        <item name="lineHeight">22sp</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+    <style name="TextAppearance.Fos.Button" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:fontFamily">@font/figtree_700</item>
+        <item name="fontFamily">@font/figtree_700</item>
+        <item name="android:textSize">17sp</item>
+        <item name="lineHeight">22sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="TextAppearance.Fos.Overline" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:fontFamily">@font/figtree_800</item>
+        <item name="fontFamily">@font/figtree_800</item>
+        <item name="android:textSize">12sp</item>
+        <item name="lineHeight">16sp</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+    <!-- page-title: display 24/30 800 -->
+    <style name="TextAppearance.Fos.PageTitle" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:fontFamily">@font/bricolage_800</item>
+        <item name="fontFamily">@font/bricolage_800</item>
+        <item name="android:textSize">24sp</item>
+        <item name="lineHeight">30sp</item>
+        <item name="android:letterSpacing">-0.015</item>
+    </style>
+
+    <!-- Text roles -->
+    <style name="Fos.Text.Overline" parent="TextAppearance.Fos.Overline">
+        <item name="android:textColor">@color/ds_ink_3</item>
+    </style>
+    <style name="Fos.Text.PageTitle" parent="TextAppearance.Fos.PageTitle">
+        <item name="android:textColor">@color/ds_ink</item>
+    </style>
+    <style name="Fos.Text.Body" parent="TextAppearance.Fos.BodyLarge">
+        <item name="android:textColor">@color/ds_ink_2</item>
+    </style>
+    <style name="Fos.Text.Notice" parent="TextAppearance.Fos.Button">
+        <item name="android:textColor">@color/ds_ink</item>
+    </style>
+    <style name="Fos.Text.Error" parent="TextAppearance.Fos.Body">
+        <item name="android:textColor">@color/ds_danger</item>
+    </style>
+    <style name="Fos.Text.Heading" parent="TextAppearance.Fos.Heading">
+        <item name="android:textColor">@color/ds_ink</item>
+    </style>
+    <style name="Fos.Text.RowLabel" parent="TextAppearance.Fos.BodyLarge">
+        <item name="android:textColor">@color/ds_ink_3</item>
+    </style>
+    <style name="Fos.Text.RowValue" parent="TextAppearance.Fos.BodyLarge">
+        <item name="android:fontFamily">@font/figtree_700</item>
+        <item name="fontFamily">@font/figtree_700</item>
+        <item name="android:textColor">@color/ds_ink</item>
+        <item name="android:fontFeatureSettings">"tnum"</item>
+    </style>
+    <style name="Fos.Text.SubRowLabel" parent="TextAppearance.Fos.Body">
+        <item name="android:textColor">@color/ds_ink_3</item>
+    </style>
+    <style name="Fos.Text.SubRowValue" parent="TextAppearance.Fos.Body">
+        <item name="android:fontFamily">@font/figtree_700</item>
+        <item name="fontFamily">@font/figtree_700</item>
+        <item name="android:textColor">@color/ds_ink</item>
+        <item name="android:fontFeatureSettings">"tnum"</item>
+    </style>
+
+    <!-- Cards: surface, 1dp line border, radius-lg, no shadow -->
+    <style name="Widget.Fos.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/ds_surface</item>
+        <item name="strokeColor">@color/ds_line</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Fos.Lg</item>
+    </style>
+    <style name="Widget.Fos.Card.Tonal">
+        <item name="cardBackgroundColor">@color/ds_brand_tint</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+    <style name="Widget.Fos.Card.Warning">
+        <item name="cardBackgroundColor">@color/ds_warning_tint</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+    <style name="Widget.Fos.Card.Danger">
+        <item name="cardBackgroundColor">@color/ds_danger_tint</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+    <style name="Fos.Text.OnWarning" parent="TextAppearance.Fos.BodyLarge">
+        <item name="android:textColor">@color/ds_warning_ink</item>
+    </style>
+    <style name="Fos.Text.OnWarningStrong" parent="TextAppearance.Fos.Button">
+        <item name="android:textColor">@color/ds_warning_ink</item>
+    </style>
+
+    <!-- Buttons: 48dp touch height, radius-lg -->
+    <style name="Widget.Fos.Button" parent="Widget.Material3.Button">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Fos.Button</item>
+    </style>
+    <style name="Widget.Fos.Button.Tonal" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Fos.Button</item>
+    </style>
+    <style name="Widget.Fos.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="strokeColor">@color/ds_line_strong</item>
+        <item name="android:textColor">@color/ds_ink</item>
+        <item name="android:textAppearance">@style/TextAppearance.Fos.Button</item>
+    </style>
+    <style name="Widget.Fos.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/ds_ink</item>
+        <item name="android:textAppearance">@style/TextAppearance.Fos.Button</item>
+    </style>
+    <style name="Widget.Fos.Button.Text.Danger">
+        <item name="android:textColor">@color/ds_danger</item>
+        <item name="rippleColor">@color/ds_danger_tint</item>
+    </style>
+    <style name="Widget.Fos.Button.Text.Warning">
+        <item name="android:textColor">@color/ds_warning_ink</item>
+        <item name="rippleColor">@color/ds_warning_tint</item>
+    </style>
+
+    <!-- Fields: outlined, radius-md, line-strong border, brand focus -->
+    <style name="Widget.Fos.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <item name="boxStrokeColor">@color/box_stroke</item>
+        <item name="android:textColorHint">@color/ds_ink_4</item>
+        <item name="hintTextColor">@color/ds_ink_2</item>
+    </style>
+
+    <!-- Dialog: radius-2xl -->
+    <style name="ThemeOverlay.Fos.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Fos.Xxl</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="colorSurfaceContainerHigh">@color/ds_surface</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/Fos.Text.DialogBody</item>
+    </style>
+    <style name="Fos.Text.DialogBody" parent="TextAppearance.Fos.BodyLarge">
+        <item name="android:textColor">@color/ds_ink_2</item>
+    </style>
 </resources>

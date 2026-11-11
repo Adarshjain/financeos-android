@@ -1,3 +1,56 @@
 <resources>
     <string name="app_name">FinanceOS SMS sync</string>
+    <string name="brand_overline">FinanceOS</string>
+
+    <string name="title_connect">Connect this phone</string>
+    <string name="title_permission">Allow SMS access</string>
+    <string name="title_status">SMS sync</string>
+
+    <string name="connect_helper">Open SMS sync in the web app and type the code shown there.</string>
+    <string name="hint_site">Site address</string>
+    <string name="hint_code">Code</string>
+    <string name="button_connect">Connect</string>
+    <string name="button_connecting">Connecting</string>
+
+    <string name="permission_body">This app reads the SMS on this phone to find messages from banks and wallets. Only messages of accounts you turned on in the web app leave the phone; before that, only counts per sender are sent.</string>
+    <string name="permission_restricted">If Android blocks this for an app installed outside the Play Store: open App info, tap the three dots, choose Allow restricted settings, then come back.</string>
+    <string name="button_allow_sms">Allow SMS access</string>
+    <string name="button_app_settings">Open app settings</string>
+
+    <string name="notice_syncing">Syncing</string>
+    <string name="banner_rules_error">Could not read the rules from the site</string>
+    <string name="banner_paused_phone">Paused on this phone</string>
+    <string name="banner_paused_web">Paused from the web app</string>
+
+    <string name="row_last_sync">Last sync</string>
+    <string name="row_accounts_on">Accounts on</string>
+    <string name="row_messages_sent">Messages sent</string>
+    <string name="row_waiting">Waiting to send</string>
+    <string name="value_never">never</string>
+    <string name="heading_skipped">Skipped</string>
+    <string name="skip_personal">Personal</string>
+    <string name="skip_otp">OTP</string>
+    <string name="skip_promo">Promo</string>
+    <string name="skip_unknown_sender">Unknown sender</string>
+    <string name="skip_too_long">Too long</string>
+    <string name="skip_failed">Could not send</string>
+
+    <string name="battery_restricted">Background use is restricted for this app, so syncing may stop while the phone is idle.</string>
+    <string name="button_battery">Open battery settings</string>
+
+    <string name="button_sync_now">Sync now</string>
+    <string name="button_open_site">Open SMS sync page</string>
+    <string name="button_pause">Pause</string>
+    <string name="button_resume">Resume</string>
+    <string name="button_disconnect">Disconnect</string>
+    <string name="dialog_disconnect_message">This phone stops syncing. If it cannot reach the site now, also remove it on the SMS sync page.</string>
+    <string name="button_cancel">Cancel</string>
+
+    <string name="error_site_debug">Enter the site address, for example https://example.test</string>
+    <string name="error_site">Enter the site address. It must start with https://</string>
+    <string name="error_code">Enter the code from the web app</string>
+    <string name="error_too_many">Too many tries, wait 15 minutes</string>
+    <string name="error_code_rejected">That code did not work. Check it or make a new one in the web app.</string>
+    <string name="error_server">The server could not pair this phone (error %1$d). Try again later.</string>
+    <string name="error_unreachable">Could not reach the site. Check the address and your connection.</string>
 </resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dinero tokens, dark theme (tokens.css .dark). -->
+<resources>
+    <color name="ds_canvas">#0e1114</color>
+    <color name="ds_surface">#161a1e</color>
+    <color name="ds_sunken">#12161a</color>
+    <color name="ds_subtle">#1b2025</color>
+    <color name="ds_hover">#1f252b</color>
+    <color name="ds_pressed">#262c33</color>
+    <color name="ds_line">#262c33</color>
+    <color name="ds_line_soft">#20262c</color>
+    <color name="ds_line_strong">#3a424b</color>
+    <color name="ds_ink">#eceff2</color>
+    <color name="ds_ink_2">#c9cfd6</color>
+    <color name="ds_ink_3">#9aa3ae</color>
+    <color name="ds_ink_4">#929ba7</color>
+    <color name="ds_brand">#eceff2</color>
+    <color name="ds_on_brand">#121417</color>
+    <color name="ds_brand_tint">#2a2f36</color>
+    <color name="ds_danger">#f0607a</color>
+    <color name="ds_danger_tint">#3a1820</color>
+    <color name="ds_danger_ink">#fda4af</color>
+    <color name="ds_warning">#f2a640</color>
+    <color name="ds_warning_tint">#3a2a12</color>
+    <color name="ds_warning_ink">#f7c987</color>
+    <color name="ds_backdrop">#99000000</color>
+</resources>

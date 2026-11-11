@@ -1,176 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ds_canvas"
+    android:clipToPadding="false"
     android:fillViewport="true">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/notice"
+        <!-- 480dp of content + 20dp padding each side -->
+        <com.financeos.smssync.MaxWidthLinearLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <!-- 1. Connect -->
-        <LinearLayout
-            android:id="@+id/connectPanel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:paddingStart="20dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="24dp"
+            app:maxWidth="520dp">
+
+            <!-- Header, every state -->
+            <TextView
+                style="@style/Fos.Text.Overline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/brand_overline" />
 
             <TextView
+                android:id="@+id/screenTitle"
+                style="@style/Fos.Text.PageTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Connect this phone"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="4dp" />
 
-            <EditText
-                android:id="@+id/siteInput"
+            <!-- Sync progress / one-off notices -->
+            <LinearLayout
+                android:id="@+id/noticeBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Site address"
-                android:importantForAutofill="no"
-                android:inputType="textUri" />
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <EditText
-                android:id="@+id/codeInput"
+                <TextView
+                    android:id="@+id/notice"
+                    style="@style/Fos.Text.Notice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/syncProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:indicatorColor="@color/ds_brand"
+                    app:trackColor="@color/ds_line"
+                    app:trackCornerRadius="2dp"
+                    app:trackThickness="4dp" />
+            </LinearLayout>
+
+            <!-- 1. Connect -->
+            <LinearLayout
+                android:id="@+id/connectPanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Code"
-                android:importantForAutofill="no"
-                android:inputType="textVisiblePassword" />
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <Button
-                android:id="@+id/connectButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Connect" />
+                <TextView
+                    style="@style/Fos.Text.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/connect_helper" />
 
-            <TextView
-                android:id="@+id/connectError"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/siteLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:hint="@string/hint_site">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/siteInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:importantForAutofill="no"
+                        android:inputType="textUri" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/codeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="@string/hint_code">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/codeInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:importantForAutofill="no"
+                        android:inputType="textVisiblePassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/connectError"
+                    style="@style/Fos.Text.Error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/connectButton"
+                    style="@style/Widget.Fos.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/button_connect" />
+            </LinearLayout>
+
+            <!-- 2. Permission -->
+            <LinearLayout
+                android:id="@+id/permissionPanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:visibility="gone">
 
-        <!-- 2. Permission -->
-        <LinearLayout
-            android:id="@+id/permissionPanel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+                <TextView
+                    style="@style/Fos.Text.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/permission_body" />
 
-            <TextView
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Fos.Card.Tonal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        style="@style/Fos.Text.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/permission_restricted" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/permissionButton"
+                    style="@style/Widget.Fos.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/button_allow_sms" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/appSettingsButton"
+                    style="@style/Widget.Fos.Button.Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/button_app_settings" />
+            </LinearLayout>
+
+            <!-- 3. Status -->
+            <LinearLayout
+                android:id="@+id/statusPanel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Allow SMS access"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="This app reads the SMS on this phone to find messages from banks and wallets. Only messages of accounts you turned on in the web app leave the phone; before that, only counts per sender are sent." />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/pausedCard"
+                    style="@style/Widget.Fos.Card.Warning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="If Android blocks this for an app installed outside the Play Store: open App info, tap the three dots, choose Allow restricted settings, then come back." />
+                    <TextView
+                        android:id="@+id/pausedBanner"
+                        style="@style/Fos.Text.OnWarningStrong"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp" />
+                </com.google.android.material.card.MaterialCardView>
 
-            <Button
-                android:id="@+id/permissionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Allow SMS access" />
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.Fos.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
 
-            <Button
-                android:id="@+id/appSettingsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Open app settings" />
-        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingStart="16dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="12dp">
 
-        <!-- 3. Status -->
-        <LinearLayout
-            android:id="@+id/statusPanel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+                        <LinearLayout
+                            android:id="@+id/statsContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="@drawable/divider_line"
+                            android:orientation="vertical"
+                            android:showDividers="middle" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="SMS sync"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                        <com.google.android.material.divider.MaterialDivider
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:dividerColor="@color/ds_line_soft" />
 
-            <TextView
-                android:id="@+id/pausedBanner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                        <TextView
+                            style="@style/Fos.Text.Heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/heading_skipped" />
 
-            <TextView
-                android:id="@+id/statusText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:lineSpacingExtra="4dp" />
+                        <LinearLayout
+                            android:id="@+id/skipContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/batteryText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Background use is restricted for this app, so syncing may stop while the phone is idle."
-                android:visibility="gone" />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/batteryCard"
+                    style="@style/Widget.Fos.Card.Warning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone">
 
-            <Button
-                android:id="@+id/batteryButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Open battery settings"
-                android:visibility="gone" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
-            <Button
-                android:id="@+id/syncButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Sync now" />
+                        <TextView
+                            android:id="@+id/batteryText"
+                            style="@style/Fos.Text.OnWarning"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/battery_restricted" />
 
-            <Button
-                android:id="@+id/openSiteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Open SMS sync page" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/batteryButton"
+                            style="@style/Widget.Fos.Button.Text.Warning"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/button_battery" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-            <Button
-                android:id="@+id/pauseButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pause" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/syncButton"
+                    style="@style/Widget.Fos.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/button_sync_now" />
 
-            <Button
-                android:id="@+id/disconnectButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Disconnect" />
-        </LinearLayout>
-    </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/openSiteButton"
+                    style="@style/Widget.Fos.Button.Tonal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/button_open_site" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/pauseButton"
+                    style="@style/Widget.Fos.Button.Outlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/button_pause" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/disconnectButton"
+                    style="@style/Widget.Fos.Button.Text.Danger"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/button_disconnect" />
+            </LinearLayout>
+        </com.financeos.smssync.MaxWidthLinearLayout>
+    </FrameLayout>
 </ScrollView>
