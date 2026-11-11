@@ -1,9 +1,19 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
+// Sign-in settings: local.properties (git-ignored) or a Gradle property of the same name.
+val localProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+fun signInSetting(key: String, default: String): String =
+    (localProps.getProperty(key) ?: providers.gradleProperty(key).orNull ?: default).trim()
+fun String.asBuildConfigString() = "\"" + replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
 android {
     namespace = "com.financeos.smssync"
@@ -16,6 +26,8 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+        buildConfigField("String", "SITE_URL", signInSetting("financeos.siteUrl", "https://financeos-client.vercel.app").asBuildConfigString())
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", signInSetting("financeos.googleWebClientId", "").asBuildConfigString())
     }
 
     buildFeatures {
@@ -43,6 +55,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.work:work-runtime:2.10.0")
     implementation("com.google.android.material:material:1.13.0")
+    implementation("androidx.credentials:credentials:1.5.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.json:json:20240303")

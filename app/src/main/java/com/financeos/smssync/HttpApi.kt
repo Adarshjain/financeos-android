@@ -5,7 +5,7 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
-/** Plain HttpURLConnection client. Never logs bodies, tokens or the code. */
+/** Plain HttpURLConnection client. Never logs bodies, tokens or passwords. */
 class HttpApi(private val site: String, private val token: String?) : DeviceApi {
 
     class Response(val code: Int, val body: String)
@@ -39,8 +39,11 @@ class HttpApi(private val site: String, private val token: String?) : DeviceApi 
         return r
     }
 
-    fun pair(code: String, deviceName: String): Response =
-        request("POST", "/api/v1/sms/pair", JSONObject().put("code", code).put("deviceName", deviceName).toString(), null)
+    fun login(email: String, password: String, deviceName: String): Response =
+        request("POST", "/api/v1/sms/login", loginBody(email, password, deviceName), null)
+
+    fun loginWithGoogle(idToken: String, deviceName: String): Response =
+        request("POST", "/api/v1/sms/login/google", googleLoginBody(idToken, deviceName), null)
 
     /** Best effort: tells the server this phone is gone. Every failure is ignored. */
     fun revoke() {
@@ -85,5 +88,13 @@ class HttpApi(private val site: String, private val token: String?) : DeviceApi 
         } finally {
             conn.disconnect()
         }
+    }
+
+    companion object {
+        fun loginBody(email: String, password: String, deviceName: String): String =
+            JSONObject().put("email", email).put("password", password).put("deviceName", deviceName).toString()
+
+        fun googleLoginBody(idToken: String, deviceName: String): String =
+            JSONObject().put("idToken", idToken).put("deviceName", deviceName).toString()
     }
 }

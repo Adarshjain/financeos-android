@@ -18,6 +18,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.GetCredentialException
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import android.os.CancellationSignal
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -51,7 +61,8 @@ class MainActivity : AppCompatActivity() {
         }
         store = LocalStore(this)
 
-        findViewById<Button>(R.id.connectButton).setOnClickListener { connect() }
+        findViewById<Button>(R.id.connectButton).setOnClickListener { signInWithPassword() }
+        findViewById<Button>(R.id.googleButton).setOnClickListener { signInWithGoogle() }
         findViewById<Button>(R.id.permissionButton).setOnClickListener {
             // once asked and no longer shown a prompt, the system will not ask again: send to app settings
             if (store.permissionAsked && !shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS)) {
@@ -135,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         statusPanel.visibility = View.GONE
         findViewById<TextView>(R.id.screenTitle).setText(
             when {
-                !store.isConnected -> R.string.title_connect
+                !store.isConnected -> R.string.title_sign_in
                 !hasSmsPermission() -> R.string.title_permission
                 else -> R.string.title_status
             },
@@ -143,8 +154,12 @@ class MainActivity : AppCompatActivity() {
         when {
             !store.isConnected -> {
                 connectPanel.visibility = View.VISIBLE
-                if (findViewById<EditText>(R.id.siteInput).text.isEmpty()) {
-                    findViewById<EditText>(R.id.siteInput).setText(store.site ?: "")
+                val hasGoogle = SignInConfig.googleClientId.isNotBlank()
+                findViewById<View>(R.id.googleButton).visibility = if (hasGoogle) View.VISIBLE else View.GONE
+                findViewById<View>(R.id.orDivider).visibility = if (hasGoogle) View.VISIBLE else View.GONE
+                findViewById<View>(R.id.debugBlock).visibility = if (SignInConfig.showSiteField) View.VISIBLE else View.GONE
+                if (SignInConfig.showSiteField && findViewById<EditText>(R.id.siteInput).text.isEmpty()) {
+                    findViewById<EditText>(R.id.siteInput).setText(store.site ?: BuildConfig.SITE_URL)
                 }
             }
             !hasSmsPermission() -> permissionPanel.visibility = View.VISIBLE
@@ -216,48 +231,126 @@ class MainActivity : AppCompatActivity() {
         noticeView.text = ""
     }
 
-    private fun connect() {
-        val site = SiteUrl.normalize(findViewById<EditText>(R.id.siteInput).text.toString(), BuildConfig.DEBUG)
-        val code = findViewById<EditText>(R.id.codeInput).text.toString().trim()
-        if (site == null) return showConnectError(
-            getString(if (BuildConfig.DEBUG) R.string.error_site_debug else R.string.error_site),
-        )
-        if (code.isEmpty()) return showConnectError(getString(R.string.error_code))
-        val button = findViewById<Button>(R.id.connectButton)
-        button.isEnabled = false
-        button.setText(R.string.button_connecting)
+    /** The site to sign in to: the typed one in a debug build, the built-in one otherwise. Null when it is not acceptable. */
+    private fun signInSite(): String? =
+        if (SignInConfig.showSiteField) {
+            SiteUrl.normalize(findViewById<EditText>(R.id.siteInput).text.toString(), BuildConfig.DEBUG)
+        } else {
+            SiteUrl.normalize(BuildConfig.SITE_URL, false)
+        }
+
+    private fun setSigningIn(busy: Boolean, google: Boolean = false) {
+        val signIn = findViewById<Button>(R.id.connectButton)
+        val googleButton = findViewById<Button>(R.id.googleButton)
+        signIn.isEnabled = !busy
+        googleButton.isEnabled = !busy
+        findViewById<View>(R.id.emailInput).isEnabled = !busy
+        findViewById<View>(R.id.passwordInput).isEnabled = !busy
+        signIn.setText(if (busy && !google) R.string.button_signing_in else R.string.button_sign_in)
+        googleButton.setText(if (busy && google) R.string.button_google_busy else R.string.button_google)
+    }
+
+    private fun site(): String? {
+        val site = signInSite()
+        if (site == null) showConnectError(getString(if (BuildConfig.DEBUG) R.string.error_site_debug else R.string.error_site))
+        return site
+    }
+
+    private fun signInWithPassword() {
+        val email = findViewById<EditText>(R.id.emailInput).text.toString().trim()
+        val passwordField = findViewById<EditText>(R.id.passwordInput)
+        val password = passwordField.text.toString()
+        passwordField.setText("")
+        if (email.isEmpty() || password.isEmpty()) return showConnectError(getString(R.string.error_required))
+        val site = site() ?: return
+        setSigningIn(true)
         connectError.visibility = View.GONE
         thread {
-            val message: String? = try {
-                val r = HttpApi(site, null).pair(code, Build.MODEL ?: "Android phone")
-                when {
-                    r.code in 200..299 -> {
-                        val token = org.json.JSONObject(r.body).getString("token")
-                        store.site = site
-                        store.token = token
-                        store.pausedLocally = false
-                        store.notice = null
-                        null
+            val outcome = callSignIn(site, google = false) { HttpApi(site, null).login(email, password, deviceName()) }
+            runOnUiThread { finishSignIn(outcome) }
+        }
+    }
+
+    private fun signInWithGoogle() {
+        val clientId = SignInConfig.googleClientId
+        if (clientId.isBlank()) return
+        val site = site() ?: return
+        findViewById<EditText>(R.id.passwordInput).setText("")
+        setSigningIn(true, google = true)
+        connectError.visibility = View.GONE
+        val request = GetCredentialRequest.Builder()
+            .addCredentialOption(GetSignInWithGoogleOption.Builder(clientId).build())
+            .build()
+        CredentialManager.create(this).getCredentialAsync(
+            this, request, CancellationSignal(), ContextCompat.getMainExecutor(this),
+            object : androidx.credentials.CredentialManagerCallback<GetCredentialResponse, GetCredentialException> {
+                override fun onResult(result: GetCredentialResponse) {
+                    val idToken = idTokenOf(result)
+                    if (idToken == null) {
+                        setSigningIn(false)
+                        return showConnectError(getString(R.string.error_google_phone))
                     }
-                    r.code == 429 -> getString(R.string.error_too_many)
-                    r.code == 400 || r.code == 401 || r.code == 404 -> getString(R.string.error_code_rejected)
-                    else -> getString(R.string.error_server, r.code)
-                }
-            } catch (e: Exception) {
-                getString(R.string.error_unreachable)
-            }
-            runOnUiThread {
-                button.isEnabled = true
-                button.setText(R.string.button_connect)
-                if (message != null) showConnectError(message) else {
-                    findViewById<EditText>(R.id.codeInput).setText("")
-                    render()
-                    if (hasSmsPermission()) {
-                        SyncRunner.schedulePeriodic(this)
-                        SyncRunner.enqueueNow(this)
+                    thread {
+                        val outcome = callSignIn(site, google = true) { HttpApi(site, null).loginWithGoogle(idToken, deviceName()) }
+                        runOnUiThread { finishSignIn(outcome) }
                     }
                 }
+
+                override fun onError(e: GetCredentialException) {
+                    setSigningIn(false)
+                    if (e is GetCredentialCancellationException) return
+                    showConnectError(getString(R.string.error_google_phone))
+                }
+            },
+        )
+    }
+
+    private fun idTokenOf(result: GetCredentialResponse): String? {
+        val credential = result.credential
+        if (credential !is CustomCredential || credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) return null
+        return try {
+            GoogleIdTokenCredential.createFrom(credential.data).idToken
+        } catch (e: GoogleIdTokenParsingException) {
+            null
+        }
+    }
+
+    private fun deviceName(): String = Build.MODEL ?: "Android phone"
+
+    private class SignInOutcome(val site: String, val token: String?, val message: String?)
+
+    /** Runs a sign-in call off the main thread and turns the answer into a token or a message. */
+    private fun callSignIn(site: String, google: Boolean, call: () -> HttpApi.Response): SignInOutcome = try {
+        val r = call()
+        if (r.code in 200..299) {
+            SignInOutcome(site, org.json.JSONObject(r.body).getString("token"), null)
+        } else {
+            val message = when (SignInFailures.forStatus(google, r.code)) {
+                SignInFailure.WRONG_CREDENTIALS -> getString(R.string.error_wrong_credentials)
+                SignInFailure.GOOGLE_REJECTED -> getString(R.string.error_google_rejected)
+                SignInFailure.NO_ACCOUNT -> getString(R.string.error_no_account)
+                SignInFailure.TOO_MANY -> getString(R.string.error_too_many)
+                SignInFailure.GOOGLE_NOT_SET_UP -> getString(R.string.error_google_not_set_up)
+                SignInFailure.SERVER -> getString(R.string.error_server, r.code)
             }
+            SignInOutcome(site, null, message)
+        }
+    } catch (e: Exception) {
+        SignInOutcome(site, null, getString(if (BuildConfig.DEBUG) R.string.error_unreachable_debug else R.string.error_unreachable))
+    }
+
+    private fun finishSignIn(outcome: SignInOutcome) {
+        setSigningIn(false)
+        findViewById<EditText>(R.id.passwordInput).setText("")
+        if (outcome.token == null) return showConnectError(outcome.message ?: "")
+        store.site = outcome.site
+        store.token = outcome.token
+        store.pausedLocally = false
+        store.notice = null
+        render()
+        if (hasSmsPermission()) {
+            SyncRunner.schedulePeriodic(this)
+            SyncRunner.enqueueNow(this)
         }
     }
 

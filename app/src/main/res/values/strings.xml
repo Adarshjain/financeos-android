@@ -2,15 +2,21 @@
     <string name="app_name">FinanceOS SMS sync</string>
     <string name="brand_overline">FinanceOS</string>
 
-    <string name="title_connect">Connect this phone</string>
+    <string name="title_sign_in">Sign in</string>
     <string name="title_permission">Allow SMS access</string>
     <string name="title_status">SMS sync</string>
 
-    <string name="connect_helper">Open SMS sync in the web app and type the code shown there.</string>
+    <string name="signin_subtitle">Welcome back.</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
     <string name="hint_site">Site address</string>
-    <string name="hint_code">Code</string>
-    <string name="button_connect">Connect</string>
-    <string name="button_connecting">Connecting</string>
+    <string name="label_debug_build">Debug build</string>
+    <string name="button_sign_in">Sign in</string>
+    <string name="button_signing_in">Signing in…</string>
+    <string name="button_google">Continue with Google</string>
+    <string name="button_google_busy">Opening Google…</string>
+    <string name="divider_or">or</string>
+    <string name="signin_helper">No account yet? Sign up in the web app first.</string>
 
     <string name="permission_body">This app reads the SMS on this phone to find messages from banks and wallets. Only messages of accounts you turned on in the web app leave the phone; before that, only counts per sender are sent.</string>
     <string name="permission_restricted">If Android blocks this for an app installed outside the Play Store: open App info, tap the three dots, choose Allow restricted settings, then come back.</string>
@@ -48,9 +54,14 @@
 
     <string name="error_site_debug">Enter the site address, for example https://example.test</string>
     <string name="error_site">Enter the site address. It must start with https://</string>
-    <string name="error_code">Enter the code from the web app</string>
+    <string name="error_required">Email and password are required.</string>
+    <string name="error_wrong_credentials">Wrong email or password.</string>
+    <string name="error_google_rejected">Google sign-in was not accepted. Try again.</string>
+    <string name="error_no_account">No FinanceOS account uses this Google account. Sign up in the web app first.</string>
     <string name="error_too_many">Too many tries, wait 15 minutes</string>
-    <string name="error_code_rejected">That code did not work. Check it or make a new one in the web app.</string>
-    <string name="error_server">The server could not pair this phone (error %1$d). Try again later.</string>
-    <string name="error_unreachable">Could not reach the site. Check the address and your connection.</string>
+    <string name="error_google_not_set_up">Google sign-in is not available right now. Use email and password.</string>
+    <string name="error_google_phone">Google sign-in is not available on this phone. Use email and password.</string>
+    <string name="error_server">The server could not sign you in (error %1$d). Try again later.</string>
+    <string name="error_unreachable">Could not reach the site. Check your connection.</string>
+    <string name="error_unreachable_debug">Could not reach the site. Check the address and your connection.</string>
 </resources>

@@ -18,6 +18,7 @@ import androidx.work.Configuration
 import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
 import org.junit.Assert.assertTrue
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,15 +57,43 @@ class ScreenshotTest {
         )
     }
 
-    @Test fun connectEmpty() = shoot("connect-empty") { }
+    @After
+    fun resetSignInConfig() {
+        SignInConfig.googleClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID
+        SignInConfig.showSiteField = BuildConfig.DEBUG
+    }
 
-    @Test fun connectWithError() = shoot("connect-error") { activity ->
-        activity.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.siteInput).setText("https://example.test")
-        activity.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.codeInput).setText("123456")
-        activity.findViewById<View>(R.id.connectError).let {
-            (it as android.widget.TextView).setText(R.string.error_code_rejected)
-            it.visibility = View.VISIBLE
+    private fun releaseLook(google: Boolean) {
+        SignInConfig.googleClientId = if (google) "invented-client-id.example.test" else ""
+        SignInConfig.showSiteField = false
+    }
+
+    @Test fun signInEmptyGoogle() {
+        releaseLook(google = true)
+        shoot("signin-empty-google") { }
+    }
+
+    @Test fun signInEmptyNoGoogle() {
+        releaseLook(google = false)
+        shoot("signin-empty") { }
+    }
+
+    @Test fun signInError() {
+        releaseLook(google = true)
+        shoot("signin-error") { activity ->
+            activity.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.emailInput).setText("name@example.test")
+            activity.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.passwordInput).setText("invented-password")
+            activity.findViewById<View>(R.id.connectError).let {
+                (it as android.widget.TextView).setText(R.string.error_wrong_credentials)
+                it.visibility = View.VISIBLE
+            }
         }
+    }
+
+    @Test fun signInDebugSite() {
+        SignInConfig.googleClientId = "invented-client-id.example.test"
+        SignInConfig.showSiteField = true
+        shoot("signin-debug-site") { }
     }
 
     @Test fun permission() {
