@@ -24,18 +24,20 @@ class SignInTest {
     }
 
     @Test fun passwordBody() {
-        val o = JSONObject(HttpApi.loginBody("name@example.test", "p\"w", "Phone X"))
+        val o = JSONObject(HttpApi.loginBody("name@example.test", "p\"w", "Phone X", "abcd1234efgh5678"))
         assertEquals("name@example.test", o.getString("email"))
         assertEquals("p\"w", o.getString("password"))
         assertEquals("Phone X", o.getString("deviceName"))
-        assertEquals(3, o.length())
+        assertEquals("abcd1234efgh5678", o.getString("installId"))
+        assertEquals(4, o.length())
     }
 
     @Test fun googleBody() {
-        val o = JSONObject(HttpApi.googleLoginBody("invented-id-token", "Phone X"))
+        val o = JSONObject(HttpApi.googleLoginBody("invented-id-token", "Phone X", "abcd1234efgh5678"))
         assertEquals("invented-id-token", o.getString("idToken"))
         assertEquals("Phone X", o.getString("deviceName"))
         assertFalse(o.has("password"))
-        assertEquals(2, o.length())
+        assertEquals("abcd1234efgh5678", o.getString("installId"))
+        assertEquals(3, o.length())
     }
 }

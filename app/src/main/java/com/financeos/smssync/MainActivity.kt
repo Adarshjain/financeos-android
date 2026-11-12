@@ -266,7 +266,7 @@ class MainActivity : AppCompatActivity() {
         setSigningIn(true)
         connectError.visibility = View.GONE
         thread {
-            val outcome = callSignIn(site, google = false) { HttpApi(site, null).login(email, password, deviceName()) }
+            val outcome = callSignIn(site, google = false) { HttpApi(site, null).login(email, password, deviceName(), InstallId.get(applicationContext)) }
             runOnUiThread { finishSignIn(outcome) }
         }
     }
@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity() {
                         return showConnectError(getString(R.string.error_google_phone))
                     }
                     thread {
-                        val outcome = callSignIn(site, google = true) { HttpApi(site, null).loginWithGoogle(idToken, deviceName()) }
+                        val outcome = callSignIn(site, google = true) { HttpApi(site, null).loginWithGoogle(idToken, deviceName(), InstallId.get(applicationContext)) }
                         runOnUiThread { finishSignIn(outcome) }
                     }
                 }

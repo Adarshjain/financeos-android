@@ -39,11 +39,11 @@ class HttpApi(private val site: String, private val token: String?) : DeviceApi 
         return r
     }
 
-    fun login(email: String, password: String, deviceName: String): Response =
-        request("POST", "/api/v1/sms/login", loginBody(email, password, deviceName), null)
+    fun login(email: String, password: String, deviceName: String, installId: String): Response =
+        request("POST", "/api/v1/sms/login", loginBody(email, password, deviceName, installId), null)
 
-    fun loginWithGoogle(idToken: String, deviceName: String): Response =
-        request("POST", "/api/v1/sms/login/google", googleLoginBody(idToken, deviceName), null)
+    fun loginWithGoogle(idToken: String, deviceName: String, installId: String): Response =
+        request("POST", "/api/v1/sms/login/google", googleLoginBody(idToken, deviceName, installId), null)
 
     /** Best effort: tells the server this phone is gone. Every failure is ignored. */
     fun revoke() {
@@ -91,10 +91,10 @@ class HttpApi(private val site: String, private val token: String?) : DeviceApi 
     }
 
     companion object {
-        fun loginBody(email: String, password: String, deviceName: String): String =
-            JSONObject().put("email", email).put("password", password).put("deviceName", deviceName).toString()
+        fun loginBody(email: String, password: String, deviceName: String, installId: String): String =
+            JSONObject().put("email", email).put("password", password).put("deviceName", deviceName).put("installId", installId).toString()
 
-        fun googleLoginBody(idToken: String, deviceName: String): String =
-            JSONObject().put("idToken", idToken).put("deviceName", deviceName).toString()
+        fun googleLoginBody(idToken: String, deviceName: String, installId: String): String =
+            JSONObject().put("idToken", idToken).put("deviceName", deviceName).put("installId", installId).toString()
     }
 }

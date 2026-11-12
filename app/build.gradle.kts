@@ -24,10 +24,18 @@ android {
         applicationId = "com.financeos.smssync"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
         buildConfigField("String", "SITE_URL", signInSetting("financeos.siteUrl", "https://financeos-client.vercel.app").asBuildConfigString())
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", signInSetting("financeos.googleWebClientId", "").asBuildConfigString())
+    }
+
+    buildTypes {
+        release {
+            // Sideload only. Signed with the debug key: that is the key registered for Google sign-in.
+            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = false
+        }
     }
 
     buildFeatures {
